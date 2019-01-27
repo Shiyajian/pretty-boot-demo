@@ -1,0 +1,3 @@
+mybatis:
+  configuration:
+    default-enum-type-handler: github.shiyajian.prettyenum.config.enums.EnumTypeHandler
