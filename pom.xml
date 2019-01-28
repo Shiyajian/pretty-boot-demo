@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>github.shiyajian</groupId>
-    <artifactId>pretty-enum</artifactId>
+    <artifactId>pretty-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pretty-enum</name>
-    <description>pretty to resolve enum</description>
+    <name>pretty-demo</name>
+    <description>a pretty demo</description>
 
     <properties>
         <java.version>1.8</java.version>
