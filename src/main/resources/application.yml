@@ -1,3 +1,33 @@
+server:
+  port: 9000
+  undertow:
+    direct-buffers: true
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+    min-response-size: 2048
 mybatis:
   configuration:
-    default-enum-type-handler: github.shiyajian.prettyenum.config.enums.EnumTypeHandler
+    default-enum-type-handler: github.shiyajian.pretty.config.enums.EnumTypeHandler
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: github.shiyajian.pretty.pojo
+spring:
+  application:
+    name: pertty-demo
+  http:
+    encoding:
+      enabled: true
+      force-request: true
+      force-response: true
+      charset: UTF-8
+    converters:
+      preferred-json-mapper: jackson
+  profiles:
+    active: dev
+  datasource:
+    hikari:
+      pool-name: demo-pool
+      connection-test-query: select 1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
