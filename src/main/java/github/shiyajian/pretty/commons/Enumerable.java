@@ -1,12 +1,8 @@
 package github.shiyajian.pretty.commons;
 
-import github.shiyajian.pretty.utils.SpringContext;
-import org.springframework.context.MessageSource;
-import org.springframework.web.servlet.support.RequestContextUtils;
+import github.shiyajian.pretty.utils.I18nMessageUtil;
 
-import java.util.Locale;
-
-import static github.shiyajian.pretty.utils.ServletContext.request;
+import javax.annotation.Nonnull;
 
 /**
  * @author shiyajian
@@ -16,17 +12,24 @@ public interface Enumerable<E extends Enumerable> {
 
     /**
      * 获取在i18n文件中对应的 key
+     * @return key
      */
+    @Nonnull
     String getKey();
 
     /**
      * 获取最终保存到数据的值
+     * @return 值
      */
+    @Nonnull
     int getValue();
 
-    default String getDescription() {
-        MessageSource messageSource = (MessageSource) SpringContext.getBean(MessageSource.class);
-        Locale locale = RequestContextUtils.getLocale(request());
-        return messageSource.getMessage(this.getKey(), null, locale);
+    /**
+     * 获取 key 对应的文本信息
+     * @return 文本信息
+     */
+    @Nonnull
+    default String getText() {
+        return I18nMessageUtil.getMessage(this.getKey(), null);
     }
 }

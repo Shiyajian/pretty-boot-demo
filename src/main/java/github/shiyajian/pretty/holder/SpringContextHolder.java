@@ -1,15 +1,17 @@
-package github.shiyajian.pretty.utils;
+package github.shiyajian.pretty.holder;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author shiyajian
  * create: 2018-12-27
  */
 @Component
-public class SpringContext implements ApplicationContextAware {
+public class SpringContextHolder implements ApplicationContextAware {
 
     private static ApplicationContext ctx;
 
@@ -18,7 +20,7 @@ public class SpringContext implements ApplicationContextAware {
         ctx = applicationContext;
     }
 
-    public static Object getBean(Class clazz) {
+    public static Object getBean(@Nonnull Class clazz) {
         return ctx.getBean(clazz);
     }
 }

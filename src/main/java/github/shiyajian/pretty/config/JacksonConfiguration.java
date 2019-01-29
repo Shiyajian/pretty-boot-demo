@@ -1,5 +1,8 @@
 package github.shiyajian.pretty.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.collect.ImmutableList;
@@ -33,6 +36,14 @@ public class JacksonConfiguration {
     public MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter() {
         final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = converter.getObjectMapper();
+        // Include.NON_EMPTY 属性为 空（""） 或者为 NULL 都不序列化，则返回的json是没有这个字段的。这样对移动端会更省流量
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        // 反序列化时候，遇到多余的字段不失败，忽略
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // 允许出现特殊字符和转义符
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+        // 允许出现单引号
+        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         SimpleModule customerModule = new SimpleModule();
         customerModule.addDeserializer(String.class, new StringTrimDeserializer(String.class));
         customerModule.addDeserializer(Enumerable.class, new EnumDeserializer(Enumerable.class));

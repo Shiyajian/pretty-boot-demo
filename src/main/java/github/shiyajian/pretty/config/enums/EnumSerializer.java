@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import github.shiyajian.pretty.commons.Enumerable;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -13,7 +14,7 @@ import java.io.IOException;
  */
 public class EnumSerializer extends StdSerializer<Enumerable> {
 
-    public EnumSerializer(Class<Enumerable> type) {
+    public EnumSerializer(@Nonnull Class<Enumerable> type) {
         super(type);
     }
 
@@ -21,7 +22,7 @@ public class EnumSerializer extends StdSerializer<Enumerable> {
     public void serialize(Enumerable enumerable, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("value", enumerable.getValue());
-        jsonGenerator.writeStringField("description", enumerable.getDescription());
+        jsonGenerator.writeStringField("text", enumerable.getText());
         jsonGenerator.writeEndObject();
     }
 }

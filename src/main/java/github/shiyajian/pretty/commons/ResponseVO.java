@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.annotation.Nullable;
 
 /**
- * 统一返回实体
+ * 统一返回实体,全局使用包装类，如果结果为null，jackson不会传输，减少容量，美化结果
  * @author shiyajian
  * create: 2018-10-24
  */
@@ -44,28 +44,33 @@ public class ResponseVO<T> {
     private T data;
 
     public ResponseVO() {
-        this(ResponseEnum.SUCCESS, true, 0L, null);
+        this(ResponseEnum.SUCCESS, null, true, null, null);
     }
 
     public ResponseVO(T data) {
-        this(ResponseEnum.SUCCESS, true, 0L, data);
-    }
-
-    public ResponseVO(ResponseEnum responseEnum) {
-        this(responseEnum, true, 0L, null);
+        this(ResponseEnum.SUCCESS, null, true, null, data);
     }
 
     public ResponseVO(ResponseEnum responseEnum, boolean succeeded) {
-        this(responseEnum, succeeded, 0L, null);
+        this(responseEnum, null, succeeded, null, null);
+    }
+
+    public ResponseVO(ResponseEnum responseEnum, String msg, boolean succeeded) {
+        this(responseEnum, msg, succeeded, null, null);
     }
 
     public ResponseVO(Long total, T data) {
-        this(ResponseEnum.SUCCESS, true, total, data);
+        this(ResponseEnum.SUCCESS, null, true, total, data);
     }
 
-    public ResponseVO(ResponseEnum responseEnum, Boolean succeeded, Long total, T data) {
-        this.code = responseEnum.getValue();
-        this.msg = responseEnum.getDescription();
+    public ResponseVO(ResponseEnum responseEnum, String msg, Boolean succeeded, Long total, T data) {
+        this(responseEnum.getText(), responseEnum.getValue(), msg, succeeded, total, data);
+    }
+
+    public ResponseVO(String error, Integer code, String msg, Boolean succeeded, Long total, T data) {
+        this.error = error;
+        this.code = code;
+        this.msg = msg;
         this.succeeded = succeeded;
         this.total = total;
         this.data = data;

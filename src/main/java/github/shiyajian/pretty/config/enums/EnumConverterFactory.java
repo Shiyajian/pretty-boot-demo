@@ -5,6 +5,7 @@ import github.shiyajian.pretty.utils.EnumUtil;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -18,22 +19,22 @@ public class EnumConverterFactory implements ConverterFactory<String, Enumerable
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public <T extends Enumerable> Converter<String, T> getConverter(Class<T> targetType) {
+    public <T extends Enumerable> Converter<String, T> getConverter(@Nonnull Class<T> targetType) {
         return converterCache.computeIfAbsent(targetType,
                 k -> converterCache.put(k, new EnumConverter(k))
         );
     }
 
-    protected class EnumConverter<T extends Enumerable> implements Converter<String, T> {
+    protected class EnumConverter<T extends Enumerable> implements Converter<Integer, T> {
 
         private final Class<T> enumType;
 
-        public EnumConverter(Class<T> enumType) {
+        public EnumConverter(@Nonnull Class<T> enumType) {
             this.enumType = enumType;
         }
 
         @Override
-        public T convert(String value) {
+        public T convert(@Nonnull Integer value) {
             return EnumUtil.of(this.enumType, value);
         }
     }

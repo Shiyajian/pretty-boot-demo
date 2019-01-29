@@ -1,5 +1,6 @@
 package github.shiyajian.pretty.utils;
 
+import javax.annotation.Nonnull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +25,7 @@ public final class DateUtil {
 
     private DateUtil() { /* no instance */ }
 
-    public static Date openOf(Date date) {
+    public static Date openOf(@Nonnull Date date) {
         try {
             return new SimpleDateFormat(DATETIME_PATTERN).parse(open(date));
         } catch (ParseException e) {
@@ -33,7 +34,7 @@ public final class DateUtil {
         return null;
     }
 
-    public static Date closeOf(Date date) {
+    public static Date closeOf(@Nonnull Date date) {
         try {
             return new SimpleDateFormat(DATETIME_PATTERN).parse(close(date));
         } catch (ParseException e) {
@@ -42,12 +43,12 @@ public final class DateUtil {
         return null;
     }
 
-    public static String open(Date date) {
+    public static String open(@Nonnull Date date) {
         String dateAfterFormat = new SimpleDateFormat(DATE_PATTERN).format(date);
         return (dateAfterFormat + SEPARATOR + OPEN_SUFFIX);
     }
 
-    public static String close(Date date) {
+    public static String close(@Nonnull Date date) {
         String dateAfterFormat = new SimpleDateFormat(DATE_PATTERN).format(date);
         return (dateAfterFormat + SEPARATOR + CLOSE_SUFFIX);
     }

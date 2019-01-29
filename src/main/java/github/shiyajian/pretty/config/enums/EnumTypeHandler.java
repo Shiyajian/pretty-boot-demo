@@ -5,6 +5,7 @@ import github.shiyajian.pretty.utils.EnumUtil;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
+import javax.annotation.Nonnull;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +22,7 @@ public class EnumTypeHandler<E extends Enumerable> extends BaseTypeHandler<E> {
     public EnumTypeHandler() { /* instance */ }
 
 
-    public EnumTypeHandler(Class<E> enumType) {
+    public EnumTypeHandler(@Nonnull Class<E> enumType) {
         this.enumType = enumType;
     }
 

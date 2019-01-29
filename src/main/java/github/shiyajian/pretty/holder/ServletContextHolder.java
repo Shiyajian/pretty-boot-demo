@@ -1,4 +1,4 @@
-package github.shiyajian.pretty.utils;
+package github.shiyajian.pretty.holder;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -12,9 +12,9 @@ import javax.servlet.http.HttpSession;
  * @author shiyajian
  * create: 2018-12-25
  */
-public class ServletContext {
+public class ServletContextHolder {
 
-    private ServletContext() { /* no instance */ }
+    private ServletContextHolder() { /* no instance */ }
 
     /**
      * 通过静态方法获得当前的request对象

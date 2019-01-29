@@ -29,4 +29,9 @@ public class ResponseUtil {
     public static <T> ResponseVO<T> failed(ResponseEnum response) {
         return new ResponseVO<>(response, false);
     }
+
+    public static <T> ResponseVO<T> failed(ResponseEnum response, String msg) {
+        return new ResponseVO<>(response, msg, false);
+    }
+
 }

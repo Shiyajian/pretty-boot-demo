@@ -2,7 +2,7 @@ package github.shiyajian.pretty.utils;
 
 import org.springframework.util.DigestUtils;
 
-import javax.validation.constraints.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * @author shiyajian
@@ -18,7 +18,7 @@ public class MD5Util {
      * @param slat     盐值
      * @return 加密后的密码
      */
-    public static String getMd5(@NotNull String password, @NotNull String slat) {
+    public static String getMd5(@Nonnull String password, @Nonnull String slat) {
         return DigestUtils.md5DigestAsHex(mix(password, slat).getBytes());
     }
 
@@ -29,7 +29,7 @@ public class MD5Util {
      * @param encodedPassword 已经加过密的密码
      * @return 是否匹配
      */
-    public static boolean match(@NotNull String password, @NotNull String slat, @NotNull String encodedPassword) {
+    public static boolean match(@Nonnull String password, @Nonnull String slat, @Nonnull String encodedPassword) {
         return encodedPassword.equals(getMd5(password, slat));
     }
 
@@ -39,7 +39,7 @@ public class MD5Util {
      * @param slat     盐值
      * @return 混合后的明文字符
      */
-    private static String mix(String password, String slat) {
+    private static String mix(@Nonnull String password, @Nonnull String slat) {
         return "{" + password + ")[" + slat + ")";
     }
 

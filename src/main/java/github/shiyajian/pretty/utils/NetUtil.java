@@ -1,5 +1,7 @@
 package github.shiyajian.pretty.utils;
 
+import github.shiyajian.pretty.holder.ServletContextHolder;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -16,7 +18,7 @@ public final class NetUtil {
      * @return
      */
     public static String getIpAddress() {
-        HttpServletRequest request = ServletContext.request();
+        HttpServletRequest request = ServletContextHolder.request();
         String ip = request.getHeader("X-Forwarded-For");
 
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
