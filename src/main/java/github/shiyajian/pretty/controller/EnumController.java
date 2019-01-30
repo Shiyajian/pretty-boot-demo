@@ -14,8 +14,8 @@ import java.util.List;
  * create: 2019-01-27
  */
 @RestController
-@RequestMapping("/dict")
-public class DictionaryController {
+@RequestMapping("/enum")
+public class EnumController {
 
     /**
      * 所有需要枚举类的地方，调用此接口，返回整个枚举类列表
@@ -24,6 +24,6 @@ public class DictionaryController {
      */
     @GetMapping("/{key}")
     List<Enumerable> getEnums(@PathVariable String key) {
-        return null;
+        throw new RuntimeException();
     }
 }

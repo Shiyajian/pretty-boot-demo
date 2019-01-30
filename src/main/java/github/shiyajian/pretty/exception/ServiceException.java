@@ -1,7 +1,7 @@
 package github.shiyajian.pretty.exception;
 
+import github.shiyajian.pretty.commons.AbstractServiceException;
 import github.shiyajian.pretty.commons.ResponseEnum;
-import github.shiyajian.pretty.commons.ServiceThrowable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
  * @author shiyajian
  * create: 2019-01-29
  */
-public class ServiceException extends ServiceThrowable {
+public class ServiceException extends AbstractServiceException {
 
     public ServiceException(@Nonnull String key, @Nullable Object... args) {
         super(key, args);

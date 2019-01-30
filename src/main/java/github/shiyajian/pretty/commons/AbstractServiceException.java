@@ -8,7 +8,7 @@ import lombok.Data;
  * create: 2019-01-29
  */
 @Data
-public abstract class ServiceThrowable extends RuntimeException {
+public abstract class AbstractServiceException extends RuntimeException {
 
     /**
      * i18n 文件中对应的key
@@ -18,12 +18,12 @@ public abstract class ServiceThrowable extends RuntimeException {
     /**
      * i18n 文件中的对应文本信息可以是占位符，比如：hello {0} ,welcome {1}
      */
-    protected Object[] args;
+    protected final Object[] args;
 
-    public ServiceThrowable(String key, Object... args) {
+    public AbstractServiceException(String key, Object... args) {
         this.key = key;
         this.args = args;
     }
 
-    abstract public ResponseEnum getResponseEnum();
+    public abstract ResponseEnum getResponseEnum();
 }

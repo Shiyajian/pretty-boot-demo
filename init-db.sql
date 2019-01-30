@@ -1,5 +1,5 @@
-CREATE database pretty_enum;
-use pretty_enum;
+CREATE database if not EXISTS pretty default character set = 'utf8mb4'; ;
+use pretty;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
