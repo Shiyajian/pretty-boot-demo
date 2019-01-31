@@ -31,3 +31,5 @@ spring:
       connection-test-query: select 1
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
+  mvc:
+    locale: zh_CN
