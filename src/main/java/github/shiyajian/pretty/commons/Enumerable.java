@@ -18,7 +18,7 @@ public interface Enumerable<E extends Enumerable> {
     String getKey();
 
     /**
-     * 获取最终保存到数据的值
+     * 获取最终保存到数据库的值
      * @return 值
      */
     @Nonnull

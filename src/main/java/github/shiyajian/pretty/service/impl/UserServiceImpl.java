@@ -1,6 +1,5 @@
 package github.shiyajian.pretty.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import github.shiyajian.pretty.dao.PermissionDAO;
 import github.shiyajian.pretty.dao.UserDAO;
 import github.shiyajian.pretty.exception.NotFoundException;
@@ -46,10 +45,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVO login(UserLoginParam param) {
-        UserDBO userDBO = Optional.of(userMapper.selectOne(new LambdaQueryWrapper<UserDBO>()
-                .eq(UserDBO::getUsername, param.getUsername())
-                .eq(UserDBO::getPassword, MD5Util.getMd5(param.getUsername(), param.getPassword()))))
+        // mybatis-plus写法
+        // UserDBO userDBO = Optional.of(userMapper.selectOne(new LambdaQueryWrapper<UserDBO>()
+        //         .eq(UserDBO::getUsername, param.getUsername())
+        //         .eq(UserDBO::getPassword, MD5Util.getMd5(param.getUsername(), param.getPassword()))))
+        //         .orElseThrow(() -> new NotFoundException("exception.user.login.failed"));
+        // UserVO vo = new UserVO();
+        // BeanUtils.copyProperties(userDBO, vo);
+
+        // mapper写法
+        // userMapper.
+        UserDBO record = new UserDBO();
+        record.setUsername(param.getUsername());
+        record.setPassword(MD5Util.getMd5(param.getUsername(), param.getPassword()));
+        UserDBO userDBO = Optional.of(userMapper.selectOne(record))
                 .orElseThrow(() -> new NotFoundException("exception.user.login.failed"));
+
         UserVO vo = new UserVO();
         BeanUtils.copyProperties(userDBO, vo);
         return vo;
