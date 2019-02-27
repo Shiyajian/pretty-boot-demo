@@ -6,10 +6,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.collect.ImmutableList;
+import github.shiyajian.pretty.commons.Enumerable;
 import github.shiyajian.pretty.config.enums.EnumDeserializer;
 import github.shiyajian.pretty.config.enums.EnumSerializer;
 import github.shiyajian.pretty.config.space.StringTrimDeserializer;
-import github.shiyajian.pretty.commons.Enumerable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,8 +36,8 @@ public class JacksonConfiguration {
     public MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter() {
         final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = converter.getObjectMapper();
-        // Include.NON_EMPTY 属性为 空（""） 或者为 NULL 都不序列化，则返回的json是没有这个字段的。这样对移动端会更省流量
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        // 空字段不序列化，包括list中空对象，和map中value为null的对象
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         // 反序列化时候，遇到多余的字段不失败，忽略
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 允许出现特殊字符和转义符

@@ -1,7 +1,5 @@
 package github.shiyajian.pretty.pojo.dbo;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import github.shiyajian.pretty.pojo.enums.GenderEnum;
 import github.shiyajian.pretty.pojo.enums.UserStatusEnum;
 import lombok.Data;
@@ -14,13 +12,13 @@ import java.util.Date;
  * create: 2019-01-27
  */
 @Data
-@TableName("t_user")
+// @TableName("t_user")
 public class UserDBO {
 
     /**
      * 用户id
      */
-    @TableId
+    // @TableId
     private Long id;
 
     /**

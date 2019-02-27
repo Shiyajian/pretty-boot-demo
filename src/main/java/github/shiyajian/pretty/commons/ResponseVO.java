@@ -28,11 +28,6 @@ public class ResponseVO<T> {
     private String msg;
 
     /**
-     * 是否成功
-     */
-    private Boolean succeeded;
-
-    /**
      * 如果是分页数据，表示总数据条数；
      * 如果不是分页，则为0
      */
@@ -43,42 +38,46 @@ public class ResponseVO<T> {
      */
     private T data;
 
+    /**
+     * 响应时间
+     */
+    private Long timestamp;
+
     public ResponseVO() {
-        this(ResponseEnum.SUCCESS, null, true, null, null);
+        this(ResponseEnum.SUCCESS, null, null, null);
     }
 
     public ResponseVO(T data) {
-        this(ResponseEnum.SUCCESS, null, true, null, data);
+        this(ResponseEnum.SUCCESS, null, null, data);
     }
 
-    public ResponseVO(ResponseEnum responseEnum, boolean succeeded) {
-        this(responseEnum, null, succeeded, null, null);
+    public ResponseVO(T data, String msg) {
+        this(ResponseEnum.SUCCESS, msg, null, data);
     }
 
-    public ResponseVO(ResponseEnum responseEnum, String msg, boolean succeeded) {
-        this(responseEnum, msg, succeeded, null, null);
+    public ResponseVO(ResponseEnum responseEnum) {
+        this(responseEnum, null, null, null);
+    }
+
+    public ResponseVO(ResponseEnum responseEnum, String msg) {
+        this(responseEnum, msg, null, null);
     }
 
     public ResponseVO(Long total, T data) {
-        this(ResponseEnum.SUCCESS, null, true, total, data);
+        this(ResponseEnum.SUCCESS, null, total, data);
     }
 
-    public ResponseVO(ResponseEnum responseEnum, String msg, Boolean succeeded, Long total, T data) {
-        this(responseEnum.getText(), responseEnum.getValue(), msg, succeeded, total, data);
+    public ResponseVO(ResponseEnum responseEnum, String msg, Long total, T data) {
+        this(responseEnum.getText(), responseEnum.getValue(), msg, total, data);
     }
 
-    public ResponseVO(String error, Integer code, String msg, Boolean succeeded, Long total, T data) {
+    public ResponseVO(String error, Integer code, String msg, Long total, T data) {
         this.error = error;
         this.code = code;
         this.msg = msg;
-        this.succeeded = succeeded;
         this.total = total;
         this.data = data;
+        this.timestamp = System.currentTimeMillis();
     }
 
-
-    @Nullable
-    public T get() {
-        return this.data;
-    }
 }

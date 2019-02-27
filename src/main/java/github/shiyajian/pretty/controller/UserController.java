@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -26,15 +28,17 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    ResponseVO<UserVO> getUsers() {
+    ResponseVO<List<UserVO>> getUsers() {
+        List<UserVO> vos = new ArrayList<>();
         UserVO vo = new UserVO();
         vo.setStatus(UserStatusEnum.LOCKED);
-        return ResponseUtil.success(vo);
+        vos.add(vo);
+        return ResponseUtil.ok(vos);
     }
 
     @GetMapping("/user/{userId}")
     ResponseVO<UserDetailVO> getUserById(@PathVariable String userId) {
-        return ResponseUtil.success(userService.getUserById(userId));
+        return ResponseUtil.ok(userService.getUserById(userId));
     }
 
     /**
@@ -44,7 +48,7 @@ public class UserController {
      */
     @PostMapping("/login")
     ResponseVO<UserVO> login(@RequestBody @Valid UserLoginParam param) {
-        return ResponseUtil.success(userService.login(param));
+        return ResponseUtil.ok(userService.login(param));
     }
 
 }
