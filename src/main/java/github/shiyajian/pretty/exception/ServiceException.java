@@ -1,7 +1,7 @@
 package github.shiyajian.pretty.exception;
 
 import github.shiyajian.pretty.commons.AbstractServiceException;
-import github.shiyajian.pretty.commons.ResponseEnum;
+import github.shiyajian.pretty.commons.ResponseStatusEnum;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -15,12 +15,16 @@ import javax.annotation.Nullable;
  */
 public class ServiceException extends AbstractServiceException {
 
+    public ServiceException() {
+        super();
+    }
+
     public ServiceException(@Nonnull String key, @Nullable Object... args) {
         super(key, args);
     }
 
     @Override
-    public ResponseEnum getResponseEnum() {
-        return ResponseEnum.UNKNOWN;
+    public ResponseStatusEnum getResponseEnum() {
+        return ResponseStatusEnum.UNKNOWN;
     }
 }

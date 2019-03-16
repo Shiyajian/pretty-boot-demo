@@ -8,11 +8,11 @@ import javax.annotation.Nonnull;
  * @author shiyajian
  * create: 2019-01-27
  */
-public interface Enumerable<E extends Enumerable> {
+public interface Enumerable {
 
     /**
-     * 获取在i18n文件中对应的 key
-     * @return key
+     * 获取在i18n文件中对应的 i18nKey
+     * @return i18nKey
      */
     @Nonnull
     String getKey();
@@ -25,7 +25,7 @@ public interface Enumerable<E extends Enumerable> {
     int getValue();
 
     /**
-     * 获取 key 对应的文本信息
+     * 获取 i18nKey 对应的文本信息
      * @return 文本信息
      */
     @Nonnull

@@ -1,13 +1,16 @@
 package github.shiyajian.pretty.controller;
 
 import github.shiyajian.pretty.commons.ResponseVO;
+import github.shiyajian.pretty.holder.SpringContextHolder;
 import github.shiyajian.pretty.pojo.enums.UserStatusEnum;
+import github.shiyajian.pretty.pojo.param.UserCreateParam;
 import github.shiyajian.pretty.pojo.param.UserLoginParam;
 import github.shiyajian.pretty.pojo.vo.UserDetailVO;
 import github.shiyajian.pretty.pojo.vo.UserVO;
 import github.shiyajian.pretty.service.UserService;
 import github.shiyajian.pretty.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,6 +30,19 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    @PostMapping
+    ResponseVO createUser(@RequestBody @Valid UserCreateParam param) {
+        System.out.println(param);
+        return ResponseUtil.ok();
+    }
+
+    @PostMapping("/test")
+    ResponseVO test(@RequestBody UserStatusEnum status) {
+        System.out.println(status);
+        return ResponseUtil.ok();
+    }
+
     @GetMapping
     ResponseVO<List<UserVO>> getUsers() {
         List<UserVO> vos = new ArrayList<>();
@@ -36,7 +52,7 @@ public class UserController {
         return ResponseUtil.ok(vos);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     ResponseVO<UserDetailVO> getUserById(@PathVariable String userId) {
         return ResponseUtil.ok(userService.getUserById(userId));
     }

@@ -10,6 +10,7 @@ import github.shiyajian.pretty.commons.Enumerable;
 import github.shiyajian.pretty.config.enums.EnumDeserializer;
 import github.shiyajian.pretty.config.enums.EnumSerializer;
 import github.shiyajian.pretty.config.space.StringTrimDeserializer;
+import github.shiyajian.pretty.pojo.enums.UserStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,7 @@ public class JacksonConfiguration {
     @Bean
     @Primary
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter() {
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = converter.getObjectMapper();
         // 空字段不序列化，包括list中空对象，和map中value为null的对象

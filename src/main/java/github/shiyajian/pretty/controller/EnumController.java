@@ -22,7 +22,7 @@ public class EnumController {
      * @param key 枚举类对应的key
      * @return 枚举属性集合
      */
-    @GetMapping("/{key}")
+    @GetMapping("/{i18nKey}")
     List<Enumerable> getEnums(@PathVariable String key) {
         throw new RuntimeException();
     }

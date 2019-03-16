@@ -15,7 +15,7 @@ public class UserLoginParam {
     /**
      * 用户名
      */
-    @Max(value = 20, message = "密码不能超过20位")
+    @Max(value = 20, message = "用户名不能超过20位")
     @NotNull(message = "用户名不能为空！")
     private String username;
 

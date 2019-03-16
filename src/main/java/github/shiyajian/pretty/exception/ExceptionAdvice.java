@@ -2,7 +2,6 @@ package github.shiyajian.pretty.exception;
 
 import github.shiyajian.pretty.commons.AbstractServiceException;
 import github.shiyajian.pretty.commons.ResponseVO;
-import github.shiyajian.pretty.utils.I18nMessageUtil;
 import github.shiyajian.pretty.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -74,7 +73,7 @@ public class ExceptionAdvice {
         log.error("服务器端错误", throwable);
         // 这里取决于要不要给前端暴露服务端的错误信息，很明显不应该暴露
         // return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        // return new ResponseEntity<>(ResponseEnum.UNKNOWN.getText(),HttpStatus.INTERNAL_SERVER_ERROR);
+        // return new ResponseEntity<>(ResponseStatusEnum.UNKNOWN.getText(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // -------------------------- business exception -----------------------------//
@@ -89,7 +88,9 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(AbstractServiceException.class)
     public ResponseVO<String> handleServiceException(AbstractServiceException exception) {
-        return ResponseUtil.failed(exception.getResponseEnum(),
-                I18nMessageUtil.getMessage(exception.getKey(), exception.getArgs()));
+        if (null == exception.getI18nKey() && null == exception.getArgs()) {
+            return ResponseUtil.fail(exception.getResponseEnum());
+        }
+        return ResponseUtil.fail(exception.getResponseEnum(), exception.getI18nKey(), exception.getArgs());
     }
 }

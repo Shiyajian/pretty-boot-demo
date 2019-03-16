@@ -5,7 +5,7 @@ package github.shiyajian.pretty.commons;
  * @author shiyajian
  * create: 2018-10-24
  */
-public enum ResponseEnum implements Enumerable {
+public enum ResponseStatusEnum implements Enumerable {
 
     /** 请求成功 */
     SUCCESS(20000, "enum.response.success"),
@@ -32,7 +32,7 @@ public enum ResponseEnum implements Enumerable {
 
     private String key;
 
-    ResponseEnum(int value, String key) {
+    ResponseStatusEnum(int value, String key) {
         this.value = value;
         this.key = key;
     }

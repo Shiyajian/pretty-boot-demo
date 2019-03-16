@@ -130,8 +130,8 @@ GenderEnum gender = EnumUtil.of(GenderEnum.class,1);
 public interface Enumerable<E extends Enumerable> {
 
     /**
-     * 获取在i18n文件中对应的 key
-     * @return key
+     *i18nKey
+     * @return i18nKey
      */
     @Nonnull
     String getKey();
@@ -144,7 +144,7 @@ public interface Enumerable<E extends Enumerable> {
     int getValue();
 
     /**
-     * 获取 key 对应的文本信息
+     *i18nKey
      * @return 文本信息
      */
     @Nonnull

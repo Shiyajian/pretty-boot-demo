@@ -1,7 +1,7 @@
 package github.shiyajian.pretty.exception;
 
 import github.shiyajian.pretty.commons.AbstractServiceException;
-import github.shiyajian.pretty.commons.ResponseEnum;
+import github.shiyajian.pretty.commons.ResponseStatusEnum;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,12 +13,16 @@ import javax.annotation.Nullable;
  */
 public class NotFoundException extends AbstractServiceException {
 
+    public NotFoundException() {
+        super();
+    }
+
     public NotFoundException(@Nonnull String key, @Nullable Object... args) {
         super(key, args);
     }
 
     @Override
-    public ResponseEnum getResponseEnum() {
-        return ResponseEnum.NOT_FOUND;
+    public ResponseStatusEnum getResponseEnum() {
+        return ResponseStatusEnum.NOT_FOUND;
     }
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import github.shiyajian.pretty.commons.Enumerable;
 import github.shiyajian.pretty.utils.EnumUtil;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -17,7 +16,7 @@ public class EnumDeserializer<E extends Enumerable> extends StdDeserializer<E> {
 
     private Class<E> enumType;
 
-    public EnumDeserializer(@Nonnull Class<E> enumType) {
+    public EnumDeserializer(Class<E> enumType) {
         super(enumType);
         this.enumType = enumType;
     }

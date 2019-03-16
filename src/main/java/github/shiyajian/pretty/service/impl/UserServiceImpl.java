@@ -3,6 +3,7 @@ package github.shiyajian.pretty.service.impl;
 import github.shiyajian.pretty.dao.PermissionDAO;
 import github.shiyajian.pretty.dao.UserDAO;
 import github.shiyajian.pretty.exception.NotFoundException;
+import github.shiyajian.pretty.exception.ServiceException;
 import github.shiyajian.pretty.mapper.UserMapper;
 import github.shiyajian.pretty.pojo.dbo.UserDBO;
 import github.shiyajian.pretty.pojo.dto.PermissionDTO;
@@ -12,6 +13,8 @@ import github.shiyajian.pretty.pojo.vo.UserDetailVO;
 import github.shiyajian.pretty.pojo.vo.UserVO;
 import github.shiyajian.pretty.service.UserService;
 import github.shiyajian.pretty.utils.MD5Util;
+import jdk.nashorn.internal.runtime.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import java.util.Optional;
  * create: 2019-01-27
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     // 和数据库交互分类两类入口，一类是 mapper , 一类是 dao

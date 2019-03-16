@@ -22,7 +22,7 @@ spring:
       force-response: true
       charset: UTF-8
     converters:
-      preferred-json-mapper: jackson
+     preferred-json-mapper: jackson
   profiles:
     active: dev
   datasource:
