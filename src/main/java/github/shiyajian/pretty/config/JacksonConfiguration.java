@@ -6,11 +6,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.collect.ImmutableList;
-import github.shiyajian.pretty.commons.Enumerable;
-import github.shiyajian.pretty.config.enums.EnumDeserializer;
-import github.shiyajian.pretty.config.enums.EnumSerializer;
+import github.shiyajian.pretty.config.enums.EnumModule;
 import github.shiyajian.pretty.config.space.StringTrimDeserializer;
-import github.shiyajian.pretty.pojo.enums.UserStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +30,6 @@ public class JacksonConfiguration {
      */
     @Bean
     @Primary
-    @SuppressWarnings({"rawtypes", "unchecked"})
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = converter.getObjectMapper();
@@ -47,9 +43,8 @@ public class JacksonConfiguration {
         objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         SimpleModule customerModule = new SimpleModule();
         customerModule.addDeserializer(String.class, new StringTrimDeserializer(String.class));
-        customerModule.addDeserializer(Enumerable.class, new EnumDeserializer(Enumerable.class));
-        customerModule.addSerializer(Enumerable.class, new EnumSerializer(Enumerable.class));
         objectMapper.registerModule(customerModule);
+        objectMapper.registerModule(new EnumModule());
         converter.setSupportedMediaTypes(ImmutableList.of(MediaType.TEXT_HTML, MediaType.APPLICATION_JSON));
         return converter;
     }
