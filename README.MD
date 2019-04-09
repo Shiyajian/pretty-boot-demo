@@ -230,7 +230,7 @@ public enum GenderEnum implements Enumerable {
   
   ```
 
-- 【入参】post为代表，将 int 转换成枚举。这块我们和前台达成一个约定，就是所有在body中的数据必须为json格式，那么后台@RequestBody对应的参数的请求的MediaType为"application/application/json"，spring MVC中对于Json格式的数据，默认是用 JacksonHttpMessageConverter，我们知道了这一点，我们只需要修改Jackson对枚举类的序列化和反序列的支持就可以了。配置如下：
+- 【入参】post为代表，将 int 转换成枚举。这块我们和前台达成一个约定，就是所有在body中的数据必须为json格式，那么后台@RequestBody对应的参数的请求的MediaType为"application/application/json"，spring MVC中对于Json格式的数据，默认是用 JacksonHttpMessageConverter，我们知道了这一点，我们只需要修改Jackson对枚举类的序列化和反序列的支持就可以了。在 Jackson 中，SimpleModule 只能对确切的类进行序列化配置，要想以接口的形式，对枚举类进行统一的序列化那就需要自己重新配置序列化的实现，本文中实现了`EnumModule` 专门负责我们自定义枚举类的序列化好反序列化，配置如下：
 
   ```java
   @Configuration
@@ -243,12 +243,11 @@ public enum GenderEnum implements Enumerable {
        */
       @Bean
       @Primary
-      @SuppressWarnings({"rawtypes", "unchecked"})
-      public MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter() {
+      public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
           final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
           ObjectMapper objectMapper = converter.getObjectMapper();
-          // Include.NON_EMPTY 属性为 空（""） 或者为 NULL 都不序列化，则返回的json是没有这个字段的。这样对移动端会更省流量
-          objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+          // 空字段不序列化，包括list中空对象，和map中value为null的对象
+          objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
           // 反序列化时候，遇到多余的字段不失败，忽略
           objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
           // 允许出现特殊字符和转义符
@@ -257,53 +256,86 @@ public enum GenderEnum implements Enumerable {
           objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
           SimpleModule customerModule = new SimpleModule();
           customerModule.addDeserializer(String.class, new StringTrimDeserializer(String.class));
-          customerModule.addDeserializer(Enumerable.class, new EnumDeserializer(Enumerable.class));
-          customerModule.addSerializer(Enumerable.class, new EnumSerializer(Enumerable.class));
           objectMapper.registerModule(customerModule);
+          objectMapper.registerModule(new EnumModule());
           converter.setSupportedMediaTypes(ImmutableList.of(MediaType.TEXT_HTML, MediaType.APPLICATION_JSON));
           return converter;
       }
+      
+      
+  /**
+   * @author shiyajian
+   * create: 2019-03-21
+   */
+  public class EnumModule extends SimpleModule {
   
-  }
-  public class EnumDeserializer<E extends Enumerable> extends StdDeserializer<E> {
-  
-      private Class<E> enumType;
-  
-      public EnumDeserializer(@Nonnull Class<E> enumType) {
-          super(enumType);
-          this.enumType = enumType;
+      public EnumModule() {
+          super("jacksonEnumTypeModule", Version.unknownVersion());
+          this.setDeserializers(new CustomDeserializers());
+          this.addSerializer(new EnumSerializer());
       }
   
-      @Override
-      public E deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-          return EnumUtil.of(this.enumType, jsonParser.getIntValue());
+      private static class CustomDeserializers extends SimpleDeserializers {
+          private CustomDeserializers() {
+          }
+  
+          @Override
+          @SuppressWarnings({"rawtypes", "unchecked"})
+          public JsonDeserializer<?> findEnumDeserializer(Class<?> type, DeserializationConfig config, BeanDescription beanDesc) throws JsonMappingException {
+              // 如果是Enumerable的实现类，调用此序列化方法，否则使用 jackson 默认的序列化方法
+              return Enumerable.class.isAssignableFrom(type) ?
+                      new EnumDeserializer(type) :
+                      super.findEnumDeserializer(type, config, beanDesc);
+          }
+  
+          private static class EnumDeserializer<E extends Enumerable> extends StdScalarDeserializer<E> {
+  
+              private Class<E> enumType;
+  
+              private EnumDeserializer(Class<E> clazz) {
+                  super(clazz);
+                  this.enumType = clazz;
+              }
+  
+              @Override
+              public E deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+                  // 前台如果传递只传value
+                  if (parser.getCurrentToken().isNumeric()) {
+                      return EnumUtil.of(this.enumType, parser.getIntValue());
+                  }
+  
+                  // 前台以对象形式传递
+                  TreeNode node = parser.getCodec().readTree(parser).get("value");
+                  if (!(node instanceof IntNode)) {
+                      throw new IllegalArgumentException(" enum value not numeric type");
+                  }
+                  IntNode intNode = (IntNode) node;
+                  return EnumUtil.of(this.enumType, intNode.intValue());
+  
+              }
+          }
       }
   
+      private static class EnumSerializer extends StdSerializer<Enumerable> {
+  
+          private EnumSerializer() {
+              super(Enumerable.class);
+          }
+  
+          @Override
+          public void serialize(Enumerable enumerable, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException {
+              jsonGenerator.writeStartObject();
+              jsonGenerator.writeNumberField("value", enumerable.getValue());
+              jsonGenerator.writeStringField("text", enumerable.getText());
+              jsonGenerator.writeEndObject();
+          }
+      }
   }
   
   ```
 
-- 【出参】当我们查询出结果，要展示给前台的时候，我们会对结果集增加@ResponseBody注解，这时候会调用Jackson的序列化方法，所以我们增加了枚举类的序列配置。为了避免前端维护枚举值和展示文本的关系，所以值和展示文本都由后台提供。
+- 【出参】当我们查询出结果，要展示给前台的时候，我们会对结果集增加@ResponseBody注解，这时候会调用Jackson的序列化方法，在EnumModule中已经有配置。为了避免前端维护枚举值和展示文本的关系，所以值和展示文本都由后台提供。
 
-  ```java
-  // 注册枚举类序列化处理类
-  customerModule.addSerializer(Enumerable.class, new EnumSerializer(Enumerable.class));
-  
-  public class EnumSerializer extends StdSerializer<Enumerable> {
-  
-      public EnumSerializer(@Nonnull Class<Enumerable> type) {
-          super(type);
-      }
-  
-      @Override
-      public void serialize(Enumerable enumerable, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-          jsonGenerator.writeStartObject();
-          jsonGenerator.writeNumberField("value", enumerable.getValue());
-          jsonGenerator.writeStringField("text", enumerable.getText());
-          jsonGenerator.writeEndObject();
-      }
-  }
-  ```
 
 这样关于入参和出参的配置都完成了，我们可以保证，所有前台传递到后台的 int 都会自动转换成枚举类。如果返回的数据有枚举类，枚举类也会包含值和展示文本，方便简单。
 

@@ -34,6 +34,7 @@ public class EnumModule extends SimpleModule {
         @Override
         @SuppressWarnings({"rawtypes", "unchecked"})
         public JsonDeserializer<?> findEnumDeserializer(Class<?> type, DeserializationConfig config, BeanDescription beanDesc) throws JsonMappingException {
+            // 如果是Enumerable的实现类，调用此序列化方法，否则使用 jackson 默认的序列化方法
             return Enumerable.class.isAssignableFrom(type) ?
                     new EnumDeserializer(type) :
                     super.findEnumDeserializer(type, config, beanDesc);
@@ -53,8 +54,8 @@ public class EnumModule extends SimpleModule {
                 // 前台如果传递只传value
                 if (parser.getCurrentToken().isNumeric()) {
                     return EnumUtil.of(this.enumType, parser.getIntValue());
-
                 }
+
                 // 前台以对象形式传递
                 TreeNode node = parser.getCodec().readTree(parser).get("value");
                 if (!(node instanceof IntNode)) {

@@ -8,7 +8,6 @@ import github.shiyajian.pretty.commons.Enumerable;
  * create: 2019-01-27
  */
 public enum GenderEnum implements Enumerable {
-
     /** 男 */
     MALE(1, "male"),
 
