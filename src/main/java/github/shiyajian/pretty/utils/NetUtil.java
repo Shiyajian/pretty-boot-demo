@@ -13,9 +13,11 @@ public final class NetUtil {
 
     private static final String UNKNOWN = "unknown";
 
+    private NetUtil() { /* no instance */ }
+
     /**
      * 获得请求的真实ip
-     * @return
+     * @return 真实IP
      */
     public static String getIpAddress() {
         HttpServletRequest request = ServletContextHolder.request();

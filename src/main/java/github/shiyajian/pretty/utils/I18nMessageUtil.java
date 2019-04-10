@@ -15,7 +15,9 @@ import static github.shiyajian.pretty.holder.ServletContextHolder.request;
  * @author shiyajian
  * create: 2019-01-29
  */
-public class I18nMessageUtil {
+public final class I18nMessageUtil {
+
+    private I18nMessageUtil() { /* no instance */ }
 
     /**
      * 根据key和参数获取对应的内容信息
@@ -23,8 +25,8 @@ public class I18nMessageUtil {
      * @param args 参数
      * @return 对应的内容信息
      */
-    public static String getMessage(@Nonnull String key,@Nullable Object[] args) {
-        MessageSource messageSource = (MessageSource) SpringContextHolder.getBean(MessageSource.class);
+    public static String getMessage(@Nonnull String key, @Nullable Object[] args) {
+        MessageSource messageSource = SpringContextHolder.getBean(MessageSource.class);
         Locale locale = RequestContextUtils.getLocale(request());
         return messageSource.getMessage(key, args, locale);
     }

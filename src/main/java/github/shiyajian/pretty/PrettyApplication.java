@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "github.shiyajian.pretty.mapper",
         "github.shiyajian.pretty.dao"
 })
-public class PrettyEnumApplication {
+public class PrettyApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PrettyEnumApplication.class, args);
+        SpringApplication.run(PrettyApplication.class, args);
     }
 
 }

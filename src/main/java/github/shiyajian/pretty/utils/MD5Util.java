@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  * @author shiyajian
  * create: 2019-01-16
  */
-public class MD5Util {
+public final class MD5Util {
 
     private MD5Util() { /* no instance */ }
 

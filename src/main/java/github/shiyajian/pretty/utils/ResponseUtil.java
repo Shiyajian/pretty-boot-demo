@@ -10,7 +10,7 @@ import java.util.List;
  * @author shiyajian
  * create: 2018-10-24
  */
-public class ResponseUtil {
+public final class ResponseUtil {
 
     private ResponseUtil() { /* no instance */ }
 
